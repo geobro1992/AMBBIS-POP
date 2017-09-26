@@ -1,7 +1,12 @@
 
-POP_Output20 = load("POP_Output20.RData")
-POP_Output200 = load("POP_Output200.RData")
-POP_Output2000 = load("POP_Output2000.RData")
+load(file = "POP_Output20.RData")
+POP_Output20 = js.super
+
+load(file = "POP_Output200.RData")
+POP_Output200 = js.super1
+
+load(file = "POP_Output2000.RData")
+POP_Output2000 = js.super2 
 
 print(POP_Output20, digits = 2)
 print(POP_Output200, digits = 2)
@@ -10,7 +15,7 @@ print(POP_Output2000, digits = 2)
 # Code to produce Fig
 par(mfrow = c(1,1), mar = c(5, 6, 2, 1), mgp = c(3.4, 1, 0), las = 1)
 plot(density(POP_Output20$sims.list$Nsuper), main = "", xlab = "", ylab = "Density", frame = FALSE, lwd = 2, ylim = c(0, 0.023), col = "blue")
-abline(v = POP_Output20$mean$N, col = "red", lwd = 2)
+abline(v = POP_Output20$mean$Nsuper, col = "red", lwd = 2)
 mtext("Size of Superpopulation", 1, line = 3)
 
 b3.lower <- b3.upper <- numeric()

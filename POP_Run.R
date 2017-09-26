@@ -28,10 +28,10 @@ inits2 <- function(){list(mean.phi = runif(1, 0, 1), mean.p = runif(1, 0, 1), ps
 parameters <- c("psi", "mean.p", "mean.phi", "b", "Nsuper", "N", "B", "nu")
 
 # MCMC settings
-ni <- 1000000
+ni <- 500000
 nt <- 500
 nb <- 10000
-nc <- 3
+nc <- 1
 
 # Call WinBUGS from R (BRT 40 min)
 js.super <- bugs(bugs.data, inits, parameters, "js-super.bug", n.chains = nc, n.thin = nt, n.iter = ni, n.burnin = nb,
@@ -44,7 +44,7 @@ js.super2 <- bugs(bugs.data2, inits2, parameters, "js-super.bug", n.chains = nc,
                  debug = TRUE, bugs.directory = "C:/Program Files (x86)/WinBUGS14", working.directory = getwd())
 
 
-save(js.super, "POP_Output20.RData")
+save(js.super, file = "POP_Output20.RData")
 save(js.super1, "POP_Output200.RData")
 save(js.super2, "POP_Output2000.RData")
 
