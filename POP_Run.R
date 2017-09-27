@@ -45,8 +45,8 @@ js.super2 <- bugs(bugs.data2, inits2, parameters, "js-super.bug", n.chains = nc,
 
 
 save(js.super, file = "POP_Output20.RData")
-save(js.super1, "POP_Output200.RData")
-save(js.super2, "POP_Output2000.RData")
+save(js.super1, file = "POP_Output200.RData")
+save(js.super2, file = "POP_Output2000.RData")
 
 
 
