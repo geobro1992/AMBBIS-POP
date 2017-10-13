@@ -2,15 +2,24 @@
 # Analysis of the JS model under the superpopulation parameterization
 #--------------------------------------------------------------------
 library(R2WinBUGS)
+library(BaSTA)
 
-# read data
-CH = as.matrix(read.csv("P4_Caps.csv", sep = ","),
-              header = F, row.names = NULL)
-CH <- CH[, 1:5]
+#Chose Pond
+pid = 4
+
+# Import data:
+dd = read.csv("raw.csv")                
+dd[, 4] = as.Date(dd[, 4], format = "%m/%d/%Y")
+dd = subset(dd, dd$X.10 == pid)
+dd = na.omit(dd[, 3:4])
+dd = dd[which(dd[, 1] != ""), ]
+
+Y = CensusToCaptHist(ID = dd[, 1], d = dd[, 2])
+CH <- as.matrix(Y[, 2:9])
 
 # Augment capture-histories by 20, 200, & 2000 pseudo-individuals
 nz <- c(20, 200, 2000)
-CH.aug <- rbind(CH, matrix(0, ncol = dim(CH)[2], nrow = nz[1]))
+CH.aug <- rbind(as.matrix(CH), matrix(0, ncol = dim(CH)[2], nrow = nz[1]))
 CH.aug1 <- rbind(CH, matrix(0, ncol = dim(CH)[2], nrow = nz[2]))
 CH.aug2 <- rbind(CH, matrix(0, ncol = dim(CH)[2], nrow = nz[3]))
 
@@ -28,9 +37,9 @@ inits2 <- function(){list(mean.phi = runif(1, 0, 1), mean.p = runif(1, 0, 1), ps
 parameters <- c("psi", "mean.p", "mean.phi", "b", "Nsuper", "N", "B", "nu")
 
 # MCMC settings
-ni <- 500000
+ni <- 50000
 nt <- 500
-nb <- 10000
+nb <- 1000
 nc <- 1
 
 # Call WinBUGS from R (BRT 40 min)

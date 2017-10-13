@@ -3,7 +3,7 @@ load(file = "POP_Output20.RData")
 POP_Output20 = js.super
 
 load(file = "POP_Output200.RData")
-POP_Output200 = js.super1
+POP_Output20 = js.super1
 
 load(file = "POP_Output2000.RData")
 POP_Output2000 = js.super2 
@@ -18,30 +18,31 @@ plot(density(POP_Output20$sims.list$Nsuper), main = "", xlab = "", ylab = "Densi
 abline(v = POP_Output20$mean$Nsuper, col = "red", lwd = 2)
 mtext("Size of Superpopulation", 1, line = 3)
 
+time <- c(2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017)
+
 b3.lower <- b3.upper <- numeric()
-for (t in 1:5) {
+for (t in 1:length(time)) {
   b3.lower[t] <- quantile(POP_Output20$sims.list$b[,t], 0.025)
   b3.upper[t] <- quantile(POP_Output20$sims.list$b[,t], 0.975)
 }
 
-time <- c(2010, 2011, 2012, 2013, 2014)
 plot(x = time + .5, y = POP_Output20$mean$b,
      main = "Pond 4", xlab = "", ylab = "Entry probability",
      frame = FALSE, las = 1, pch = 16,
-     xlim = c(2010, 2015), ylim = c(0, max(b3.upper) + 0.1))
+     xlim = c(2010, 2018), ylim = c(0, max(b3.upper) + 0.1))
 segments(time + .5, b3.lower, time + .5, b3.upper)
 mtext("Year", 1, line = 3)
 
 
 N.lower <- N.upper <- numeric()
-for (t in 1:5) {
+for (t in 1:length(time)) {
   N.lower[t] <- quantile(POP_Output20$sims.list$N[,t], 0.025)
   N.upper[t] <- quantile(POP_Output20$sims.list$N[,t], 0.975)
 }
 
 plot(x = time + .5, y = POP_Output20$mean$N, xlab = "", ylab = "Population Size", main = "Pond 4",
      frame = FALSE, las = 1, pch = 16,
-     xlim = c(2010, 2015), ylim = c(0, max(N.upper) + 0.1))
+     xlim = c(2010, 2017), ylim = c(0, max(N.upper) + 0.1))
 segments(time + .5, N.lower, time + .5, N.upper)
 mtext("Year", 1, line = 3)
 
