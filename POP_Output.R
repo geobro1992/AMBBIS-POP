@@ -86,3 +86,18 @@ dev.off()
 pdf("P4_Bugs_Plot+2000.pdf", 12, 15)
 plot(POP_Output2000)
 dev.off()
+
+
+
+# Diagnostics to try
+library(coda) 
+
+outmc <- as.mcmc.list(out)
+summary(outmc)
+plot(outmc, ask=TRUE)
+outmc[,"alpha"]
+autocorr.plot(outmc, ask=TRUE)
+gelman.plot(outmc, ask=TRUE)
+gelman.diag(outmc)
+window(outmc, thin=5) 
+

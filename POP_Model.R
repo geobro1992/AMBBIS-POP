@@ -20,11 +20,20 @@ model {
 #----------------------------------------    
 # Dirichlet prior for entry probabilities
   
+beta[1] ~ dgamma(alpha[1], 1)
+beta[2] <- 0
+beta[3] <- 0
+beta[4] <- 0
+beta[5] ~ dgamma(alpha[5], 1)
+beta[6] <- 0
+beta[7] ~ dgamma(alpha[7], 1)
+beta[8] ~ dgamma(alpha[8], 1)
+
   for (t in 1:n.occasions) {
-    beta[t] ~ dgamma(1, 1)
     b[t] <- beta[t] / sum(beta[1:n.occasions])
+    alpha[t] ~ dunif(0.1,1) 
   }
-    
+
 #-----------------------------------------------
 # Convert entry probs to conditional entry probs
   nu[1] <- b[1]

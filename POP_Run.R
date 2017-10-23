@@ -29,17 +29,17 @@ bugs.data1 <- list(y = CH.aug1, n.occasions = dim(CH.aug1)[2], M = dim(CH.aug1)[
 bugs.data2 <- list(y = CH.aug2, n.occasions = dim(CH.aug2)[2], M = dim(CH.aug2)[1])
 
 # Initial values
-inits <- function(){list(mean.phi = runif(1, 0, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug)}  
-inits1 <- function(){list(mean.phi = runif(1, 0, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug1)}  
-inits2 <- function(){list(mean.phi = runif(1, 0, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug2)}  
+inits <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug)}  
+inits1 <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug1)}  
+inits2 <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug2)}  
 
 # Parameters monitored
 parameters <- c("psi", "mean.p", "mean.phi", "b", "Nsuper", "N", "B", "nu")
 
 # MCMC settings
-ni <- 50000
-nt <- 500
-nb <- 1000
+ni <- 500000
+nt <- 100
+nb <- 10000
 nc <- 1
 
 # Call WinBUGS from R (BRT 40 min)
@@ -56,6 +56,8 @@ js.super2 <- bugs(bugs.data2, inits2, parameters, "js-super.bug", n.chains = nc,
 save(js.super, file = "POP_Output20.RData")
 save(js.super1, file = "POP_Output200.RData")
 save(js.super2, file = "POP_Output2000.RData")
+
+
 
 
 
