@@ -29,16 +29,16 @@ bugs.data1 <- list(y = CH.aug1, n.occasions = dim(CH.aug1)[2], M = dim(CH.aug1)[
 bugs.data2 <- list(y = CH.aug2, n.occasions = dim(CH.aug2)[2], M = dim(CH.aug2)[1])
 
 # Initial values
-inits <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug)}  
-inits1 <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug1)}  
-inits2 <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0, 1), psi = runif(1, 0, 1), z = CH.aug2)}  
+inits <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0.5, 1), psi = runif(1, 0, 1), z = CH.aug)}  
+inits1 <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0.5, 1), psi = runif(1, 0, 1), z = CH.aug1)}  
+inits2 <- function(){list(mean.phi = runif(1, 0, 1), beta = c(1, NA, NA, NA, 1, NA, 1, 1), mean.p = runif(1, 0.5, 1), psi = runif(1, 0, 1), z = CH.aug2)}  
 
 # Parameters monitored
-parameters <- c("psi", "mean.p", "mean.phi", "b", "Nsuper", "N", "B", "nu")
+parameters <- c("psi", "mean.p", "mean.phi", "b", "Nsuper", "N", "B", "nu", "beta")
 
 # MCMC settings
-ni <- 500000
-nt <- 100
+ni <- 200000
+nt <- 50
 nb <- 10000
 nc <- 1
 

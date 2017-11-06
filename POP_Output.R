@@ -3,9 +3,9 @@ load(file = "POP_Output20.RData")
 POP_Output20 = js.super
 
 load(file = "POP_Output200.RData")
-POP_Output20 = js.super1
+POP_Output200 = js.super1
 
-load(file = "POP_Output2000.RData")
+load(file = "POP4_Output2000.RData")
 POP_Output2000 = js.super2 
 
 print(POP_Output20, digits = 2)
@@ -21,7 +21,7 @@ mtext("Size of Superpopulation", 1, line = 3)
 time <- c(2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017)
 
 b3.lower <- b3.upper <- numeric()
-for (t in 1:length(time)) {
+for (t in 1:4) {
   b3.lower[t] <- quantile(POP_Output20$sims.list$b[,t], 0.025)
   b3.upper[t] <- quantile(POP_Output20$sims.list$b[,t], 0.975)
 }
@@ -36,13 +36,13 @@ mtext("Year", 1, line = 3)
 
 N.lower <- N.upper <- numeric()
 for (t in 1:length(time)) {
-  N.lower[t] <- quantile(POP_Output20$sims.list$N[,t], 0.025)
-  N.upper[t] <- quantile(POP_Output20$sims.list$N[,t], 0.975)
+  N.lower[t] <- quantile(POP_Output200$sims.list$N[,t], 0.025)
+  N.upper[t] <- quantile(POP_Output200$sims.list$N[,t], 0.975)
 }
 
-plot(x = time + .5, y = POP_Output20$mean$N, xlab = "", ylab = "Population Size", main = "Pond 4",
+plot(x = time + .5, y = POP_Output200$mean$N, xlab = "", ylab = "Population Size", main = "Pond 5",
      frame = FALSE, las = 1, pch = 16,
-     xlim = c(2010, 2017), ylim = c(0, max(N.upper) + 0.1))
+     xlim = c(2010, 2018), ylim = c(0, max(N.upper) + 100))
 segments(time + .5, N.lower, time + .5, N.upper)
 mtext("Year", 1, line = 3)
 
@@ -51,7 +51,7 @@ POP_Output20$mean$mean.phi
 
 # model validation - aug sensitivity 
 N1.lower <- N2.lower <- N3.lower <- N1.upper <- N2.upper <- N3.upper <- numeric()
-for (t in 1:5) {
+for (t in 1:length(time)) {
   N1.lower[t] <- quantile(POP_Output20$sims.list$N[,t], 0.025)
   N2.lower[t] <- quantile(POP_Output200$sims.list$N[,t], 0.025)
   N3.lower[t] <- quantile(POP_Output2000$sims.list$N[,t], 0.025)
@@ -60,12 +60,11 @@ for (t in 1:5) {
   N3.upper[t] <- quantile(POP_Output2000$sims.list$N[,t], 0.975)
 }
 
-time <- c(2010, 2011, 2012, 2013, 2014)
 time <- time + 0.5
 
-pdf("P4_Pop_Plot.pdf", 12, 8)
+pdf("P4_Pop_Plot17.pdf", 12, 8)
 plot(x = time - 0.15, y = POP_Output20$mean$N, xlab = "Year", ylab = "Population Size", 
-     frame = FALSE, las = 1, pch = 16, xlim = c(2010, 2015),  ylim = c(0, 300), cex.axis = 1.3, cex.lab = 1.5)
+     frame = FALSE, las = 1, pch = 16, xlim = c(2010, 2018),  ylim = c(0, 1000), cex.axis = 1.3, cex.lab = 1.5)
 segments(time - 0.15, N1.lower, time - 0.15, N1.upper)
 points(x = time, y = POP_Output200$mean$N, pch = 1)
 segments(time, N2.lower, time, N2.upper)
@@ -92,7 +91,7 @@ dev.off()
 # Diagnostics to try
 library(coda) 
 
-outmc <- as.mcmc.list(out)
+outmc <- as.mcmc.list(POP_Output20)
 summary(outmc)
 plot(outmc, ask=TRUE)
 outmc[,"alpha"]
