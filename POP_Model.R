@@ -2,31 +2,35 @@
 sink("js-super.bug")
 cat("
 model {
-    
-  for (i in 1:M) {
+
+   for (i in 1:M) {
     for (t in 1:(n.occasions-1)) {
-      phi[i, t] <- mean.phi
+      phi[i, t] <- mean.phi[group[i]]
     } #t
-    
+
     for (t in 1:n.occasions) {
-      p[i, t] <- mean.p
+      p[i, t] <- mean.p[group[i], t]
     } #t
   } #i
-    
-  mean.phi ~ dunif(0, 1)         # Prior for mean survival
-  mean.p ~ dunif(0, 1)           # Prior for mean capture
-  psi ~ dunif(0, 1)              # Prior for inclusion probability
 
+for (g in 1:G) {
+  mean.phi[g] ~ dunif(0, 1)         # Prior for mean survival
+  
+    for (t in 1:n.occasions) {
+      mean.p[g, t] ~ dunif(0, 1)           # unequal cap in 1st year
+  }
+}
+psi ~ dunif(0, 1)              # Prior for inclusion probability
 #----------------------------------------    
 # Dirichlet prior for entry probabilities
-  
-beta[1] ~ dgamma(.1, 1)
-beta[2] <- 0
-beta[3] <- 0
-beta[4] <- 0
+
+beta[1] ~ dgamma(1, 1)
+beta[2] ~ dgamma(1, 1)
+beta[3] ~ dgamma(.01, 1)
+beta[4] ~ dgamma(.01, 1)
 beta[5] ~ dgamma(1, 1)
-beta[6] <- 0
-beta[7] ~ dgamma(1, 1)
+beta[6] ~ dgamma(.01, 1)
+beta[7] ~ dgamma(.01, 1)
 beta[8] ~ dgamma(1, 1)
 
   for (t in 1:n.occasions) {
@@ -45,6 +49,7 @@ beta[8] ~ dgamma(1, 1)
 # Likelihood function
   
   for (i in 1:M) { # First occasion
+  group[i] ~ dcat(pp[]) 
 # State process
     w[i] ~ dbern(psi)
     z[i, 1] ~ dbern(nu[1])
@@ -62,7 +67,9 @@ beta[8] ~ dgamma(1, 1)
       y[i, t] ~ dbern(mu3[i, t])
     } #t
   } #i 
-    
+
+pp[1] <- .6
+pp[2] <- .4
 #----------------------------------------
 # Calculate derived population parameters
 
@@ -71,7 +78,8 @@ beta[8] ~ dgamma(1, 1)
       u[i, t] <- z[i, t] * w[i]     # Deflated latent state (u)
     }
   }
-    
+
+
   for (i in 1:M) {                                 # First occasion
     recruit[i, 1] <- u[i, 1]
     for (t in 2:n.occasions) {                     # Subsequent Occasions
@@ -79,18 +87,35 @@ beta[8] ~ dgamma(1, 1)
     } #t
   } #i
 
+for (i in 1:M) {
   for (t in 1:n.occasions) {
-    N[t] <- sum(u[1:M, t])        # Actual population size
-    B[t] <- sum(recruit[1:M, t])  # Number of entries
+
+    N1[i, t] <- u[i, t] * (1-(group[i]-1))        # Actual population size
+    B1[i, t] <- recruit[i, t] * (1-(group[i]-1))  # Number of entries
+
+    N2[i, t] <- u[i, t] * (group[i]-1)        # Actual population size
+    B2[i, t] <- recruit[i, t] * (group[i]-1)  # Number of entries
+
   } #t
-    
+} #i
+
+for (t in 1:n.occasions) {
+ 
+ N4[t] <- sum(N1[1:M, t]) 
+ N5[t] <- sum(N2[1:M, t]) 
+
+ B4[t] <- sum(B1[1:M, t]) 
+ B5[t] <- sum(B2[1:M, t]) 
+
+}
+
   for (i in 1:M) {
     Nind[i] <- sum(u[i, 1:n.occasions])
     Nalive[i] <- 1 - equals(Nind[i], 0)
   } #i
   
   Nsuper <- sum(Nalive[])         # Superpopulation size
-  
+
 }
   ", fill = TRUE)
 sink()
